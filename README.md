@@ -1,9 +1,12 @@
 <h1 align="left">Welcome to DjangoEcommerce Project: Learning Django and REST Framework 👋</h1>
-<p>
-</p>
+
+<h3 align="left">Languages and Tools:</h3>
+<p align="left"> <a href="https://www.djangoproject.com/" target="_blank" rel="noreferrer"> <img src="https://cdn.worldvectorlogo.com/logos/django.svg" alt="django" width="40" height="40"/> </a> <a href="https://www.python.org" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/python/python-original.svg" alt="python" width="40" height="40"/> </a> <a href="https://www.sqlite.org/" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/sqlite/sqlite-icon.svg" alt="sqlite" width="40" height="40"/> </a> </p>
+
+![Python](https://img.shields.io/badge/python-3670A0?style=for-the-badge&logo=python&logoColor=ffdd54)
+![DjangoREST](https://img.shields.io/badge/DJANGO-REST-ff1709?style=for-the-badge&logo=django&logoColor=white&color=ff1709&labelColor=gray)
 
 ## Overview
-
 > DjangoEcommerce is a project designed to help you understand how to use the Django framework and create a simple API using Django REST Framework. This project covers essential CRUD (Create, Read, Update, Delete) functionalities and token-based authentication through tokens and sessions.
 
 ## Key Topics
@@ -23,6 +26,7 @@
 git clone https://github.com/LuongHuuLuan/DjangoEcommere.git
 ```
 Once this command is complete, you will have a directory named DjangoEcommere containing the project's source code.
+
 2. Create a Virtual Environment:
 
 Within the project directory (DjangoEcommere), it's advisable to create a virtual environment to install the dependencies in an isolated environment. Execute the following command:
@@ -42,7 +46,8 @@ env\Scripts\activate
 source myenv/bin/activate
 ```
 Once the environment is activated, the python and pip commands will use the Python and pip versions within the virtual environment.
-4. Install libs
+
+4. Install libraries
 
 Next, we need to install the necessary libraries. The required packages are listed in the requirements.txt file.
 
@@ -51,7 +56,6 @@ pip install -r requirements.txt
 ```
 
 ## Usage
-Run the Django Development Server:
 
 Use the python manage.py runserver command to start the Django development 
 ```sh
