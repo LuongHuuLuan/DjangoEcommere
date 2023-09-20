@@ -1,0 +1,3 @@
+pip install rest_framework
+pip install Pillow
+pip install django-cors-headers

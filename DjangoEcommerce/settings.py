@@ -85,14 +85,14 @@ DATABASES = {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': BASE_DIR / 'db.sqlite3',
     },
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'django_demo',  # Tên cơ sở dữ liệu
-        'USER': 'root',  # Tên người dùng MySQL
-        'PASSWORD': '',  # Mật khẩu người dùng MySQL
-        'HOST': 'localhost',  # Địa chỉ host MySQL
-        'PORT': '3306',  # Cổng MySQL
-    }
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.mysql',
+    #     'NAME': 'django_demo',  # Tên cơ sở dữ liệu
+    #     'USER': 'root',  # Tên người dùng MySQL
+    #     'PASSWORD': '',  # Mật khẩu người dùng MySQL
+    #     'HOST': 'localhost',  # Địa chỉ host MySQL
+    #     'PORT': '3306',  # Cổng MySQL
+    # }
 }
 
 
