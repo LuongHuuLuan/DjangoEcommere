@@ -23,7 +23,7 @@ class ProductSerializer(serializers.ModelSerializer):
     # price = CustomPriceField()
     class Meta:
         model = Product
-        fields = ('name', 'introduce', 'price', 'quantity', 'create_at', 'image', 'video')
+        fields = ('id', 'name', 'introduce', 'price', 'quantity', 'create_at', 'image', 'video')
         # fields = ('name', 'introduce', 'create_at', 'image', 'video')
 
     # def get_image_url(self, obj):
@@ -31,3 +31,7 @@ class ProductSerializer(serializers.ModelSerializer):
     #
     # def get_video_url(self, obj):
     #     return obj.video.url
+class ProductResponseSerializer(serializers.Serializer):
+    status = serializers.CharField(max_length=255)
+    code = serializers.IntegerField()
+    data = ProductSerializer(many=True)
