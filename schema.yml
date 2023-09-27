@@ -10,20 +10,56 @@ paths:
       tags:
       - api
       security:
-      - tokenAuth: []
+      - jwtAuth: []
       - {}
       responses:
         '200':
-          description: No response body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResponse'
+              examples:
+                Example:
+                  value:
+                    status: success
+                    code: 200
+                    data:
+                    - id: 1
+                      name: Product 1
+                      introduce: This is product 1
+                      price: 34990000
+                      quantity: 10
+                      create_at: '2023-09-20T10:43:48.898317+07:00'
+                      image: /media/images_dir/product1.jpg
+                      video: /media/videos_dir/product1.jpg
+          description: ''
     post:
       operationId: api_products_create
       tags:
       - api
       security:
-      - tokenAuth: []
+      - jwtAuth: []
       responses:
         '200':
-          description: No response body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProductResponse'
+              examples:
+                Example:
+                  value:
+                    status: success
+                    code: 200
+                    data:
+                    - id: 1
+                      name: Product 1
+                      introduce: This is product 1
+                      price: 34990000
+                      quantity: 10
+                      create_at: '2023-09-20T10:43:48.898317+07:00'
+                      image: /media/images_dir/product1.jpg
+                      video: /media/videos_dir/product1.jpg
+          description: ''
   /api/products/{id}:
     put:
       operationId: api_products_update
@@ -35,11 +71,27 @@ paths:
         required: true
       tags:
       - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/ProductRequest'
+        required: true
       security:
       - tokenAuth: []
       responses:
         '200':
-          description: No response body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+          description: ''
     delete:
       operationId: api_products_destroy
       parameters:
@@ -61,21 +113,107 @@ paths:
       tags:
       - api
       security:
-      - tokenAuth: []
+      - jwtAuth: []
       responses:
         '200':
-          description: No response body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+              examples:
+                Example:
+                  value:
+                    status: success
+                    code: 200
+                    data:
+                      name: John Doe
+                      password: examplepassword
+                      email: johndoe@example.com
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponeFail'
+              examples:
+                NoTokenHeader:
+                  value:
+                    status: fail
+                    code: 401
+                    data:
+                      message: Authentication credentials were not provided
+                  summary: No token header
+                InvalidToken:
+                  value:
+                    status: fail
+                    code: 401
+                    data:
+                      message: Invalid token
+                  summary: Invalid token
+          description: ''
   /api/users/login:
     post:
       operationId: api_users_login_create
       tags:
       - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserLoginRequest'
+            examples:
+              Example:
+                value:
+                  email: johndoe@exam.com
+                  password: examplepassword
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserLoginRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserLoginRequest'
+        required: true
       security:
       - tokenAuth: []
       - {}
       responses:
         '200':
-          description: No response body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+              examples:
+                Example:
+                  value:
+                    status: success
+                    code: 200
+                    data:
+                      refresh_token: eb37dceaa22cd894fa1952237571449xxxxxxxxx
+                      access_token: eb37dceaa22cd894fa1952237571449xxxxxxxxx
+                      access_expires: 3600
+                      refresh_expires: 86400
+          description: ''
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponeFail'
+              examples:
+                UserNotFound:
+                  value:
+                    status: fail
+                    code: 401
+                    data:
+                      message: User not found
+                  summary: User not found
+                IncorrectPassword:
+                  value:
+                    status: fail
+                    code: 401
+                    data:
+                      message: Email or password is incorrect!
+                  summary: Incorrect password
+          description: ''
   /api/users/logout:
     post:
       operationId: api_users_logout_create
@@ -87,21 +225,319 @@ paths:
       responses:
         '200':
           description: No response body
-  /api/users/register:
+  /api/users/refresh:
     post:
-      operationId: api_users_register_create
+      operationId: api_users_refresh_create
       tags:
       - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenRequestRequest'
+            examples:
+              Example:
+                value:
+                  token: eb37dceaa22cd894fa1952237571449xxxxxxxxx
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenRequestRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RefreshTokenRequestRequest'
+        required: true
       security:
       - tokenAuth: []
       - {}
       responses:
         '200':
-          description: No response body
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+              examples:
+                Example:
+                  value:
+                    status: success
+                    code: 200
+                    data:
+                      refresh_token: eb37dceaa22cd894fa1952237571449xxxxxxxxx
+                      access_token: eb37dceaa22cd894fa1952237571449xxxxxxxxx
+                      access_expires: 3600
+                      refresh_expires: 86400
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponeFail'
+              examples:
+                Example:
+                  value:
+                    status: fail
+                    code: 400
+                    data:
+                      message: Not found token value in body
+          description: ''
+  /api/users/register:
+    post:
+      operationId: api_users_register_create
+      tags:
+      - api
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+            examples:
+              Example:
+                value:
+                  name: johndoe
+                  password: examplepassword
+                  email: johndoe@exam.com
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/UserRequest'
+        required: true
+      security:
+      - tokenAuth: []
+      - {}
+      responses:
+        '201':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UserResponse'
+              examples:
+                AccountCreated:
+                  value:
+                    status: created
+                    code: 201
+                    data:
+                      id: 1
+                      name: John Doe
+                      email: johndoe@exam.com
+                  summary: Account created
+          description: ''
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponeFail'
+              examples:
+                EmailExists:
+                  value:
+                    status: fail
+                    code: 400
+                    data:
+                      message: User with this email already exists
+                  summary: Email exists
+          description: ''
 components:
+  schemas:
+    LoginResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          maxLength: 255
+        code:
+          type: integer
+        data:
+          $ref: '#/components/schemas/TokenResponse'
+      required:
+      - code
+      - data
+      - status
+    Product:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        introduce:
+          type: string
+        price:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        quantity:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        create_at:
+          type: string
+          format: date-time
+          readOnly: true
+        image:
+          type: string
+          format: uri
+          nullable: true
+        video:
+          type: string
+          format: uri
+          nullable: true
+      required:
+      - create_at
+      - id
+      - introduce
+      - name
+    ProductRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+        introduce:
+          type: string
+          minLength: 1
+        price:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        quantity:
+          type: integer
+          maximum: 4294967295
+          minimum: 0
+          format: int64
+        image:
+          type: string
+          format: binary
+          nullable: true
+        video:
+          type: string
+          format: binary
+          nullable: true
+      required:
+      - introduce
+      - name
+    ProductResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          maxLength: 255
+        code:
+          type: integer
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/Product'
+      required:
+      - code
+      - data
+      - status
+    RefreshTokenRequestRequest:
+      type: object
+      properties:
+        token:
+          type: string
+          minLength: 1
+          maxLength: 255
+      required:
+      - token
+    ResponeFail:
+      type: object
+      properties:
+        detail:
+          type: string
+          maxLength: 255
+      required:
+      - detail
+    TokenResponse:
+      type: object
+      properties:
+        refresh_token:
+          type: string
+          maxLength: 255
+        access_token:
+          type: string
+          maxLength: 255
+        access_expires:
+          type: integer
+        refresh_expires:
+          type: integer
+      required:
+      - access_expires
+      - access_token
+      - refresh_expires
+      - refresh_token
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        name:
+          type: string
+          maxLength: 255
+        email:
+          type: string
+          maxLength: 255
+      required:
+      - email
+      - id
+      - name
+    UserLoginRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          minLength: 1
+          maxLength: 255
+        password:
+          type: string
+          minLength: 1
+          maxLength: 255
+      required:
+      - email
+      - password
+    UserRequest:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
+          maxLength: 255
+        email:
+          type: string
+          minLength: 1
+          maxLength: 255
+        password:
+          type: string
+          writeOnly: true
+          minLength: 1
+          maxLength: 255
+      required:
+      - email
+      - name
+      - password
+    UserResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          maxLength: 255
+        code:
+          type: integer
+        data:
+          $ref: '#/components/schemas/User'
+      required:
+      - code
+      - data
+      - status
   securitySchemes:
-    tokenAuth:
-      type: apiKey
-      in: header
-      name: Authorization
-      description: Token-based authentication with required prefix "Token"
+    jwtAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT

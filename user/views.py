@@ -1,6 +1,5 @@
 from django.conf import settings
 from django.contrib.auth import authenticate
-from django.contrib.auth.hashers import make_password
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from rest_framework_simplejwt.tokens import RefreshToken
@@ -9,7 +8,7 @@ from .models import User
 from .serializers import UserSerializer, UserLoginSerializer, \
     LoginResponseSerializer, UserResponseSerializer, RefreshTokenRequestSerializer, \
     ResponeFailSerializer
-from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.permissions import AllowAny
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import status
@@ -30,13 +29,9 @@ class RegisterView(APIView):
             OpenApiExample(
                 'Example',
                 value={
-                    "status": "success",
-                    "code": 200,
-                    "data": {
-                        "name": "John Doe",
-                        "password": "examplepassword",
-                        "email": "johndoe@example.com"
-                    }
+                    "name": "johndoe",
+                    "password": "examplepassword",
+                    "email": "johndoe@exam.com"
                 },
                 request_only=True,
             ),
@@ -49,7 +44,7 @@ class RegisterView(APIView):
                     "data": {
                         "id": 1,
                         "name": "John Doe",
-                        "email": "johndoe@example.com"
+                        "email": "johndoe@exam.com"
                     }
                 },
                 response_only=True,
@@ -71,9 +66,10 @@ class RegisterView(APIView):
     def post(self, request):
         serializer = UserSerializer(data=request.data)
         if serializer.is_valid():
-            serializer.validated_data['password'] = make_password(serializer.validated_data['password'])
+            # serializer.validated_data['password'] = make_password(serializer.validated_data['password'])
             user = serializer.save()
-            return Response({"status": "created", "data": serializer.data}, status=status.HTTP_201_CREATED)
+            return Response({"status": "created", "code": 200,
+                             "data": serializer.data}, status=status.HTTP_201_CREATED)
         else:
             return Response({"message": "User with this email already exists."},
                             status=status.HTTP_400_BAD_REQUEST)
@@ -89,7 +85,7 @@ class LoginView(APIView):
             OpenApiExample(
                 'Example',
                 value={
-                    "email": "johndoe@example.com",
+                    "email": "johndoe@exam.com",
                     "password": "examplepassword",
                 },
                 request_only=True,
@@ -126,10 +122,8 @@ class LoginView(APIView):
                 status_codes=[401],
                 value={
                     "status": "fail",
-                    "code": 401,
-                    "data": {
-                        "message": "Incorrect password"
-                    }
+                    'code': 401,
+                    "data": {'message': 'Email or password is incorrect!'}
                 },
                 response_only=True,
             )
@@ -138,11 +132,11 @@ class LoginView(APIView):
     def post(self, request):
 
         serializer = UserLoginSerializer(data=request.data)
-
         if serializer.is_valid():
             user = authenticate(request,
                                 username=serializer.validated_data['email'],
                                 password=serializer.validated_data['password'])
+
             if user:
                 refresh = TokenObtainPairSerializer.get_token(user)
                 return Response({
@@ -156,11 +150,21 @@ class LoginView(APIView):
                     }
                 })
             else:
-                return Response({
-                    "status": "fail",
-                    'code': 400,
-                    "data": {'message': 'Email or password is incorrect!'}
-                }, status=status.HTTP_400_BAD_REQUEST)
+                userExist = User.objects.filter(email=request.data["email"])
+                if not userExist:
+                    return Response({
+                        "status": "fail",
+                        "code": 401,
+                        "data": {
+                            "message": "User not found"
+                        }
+                    }, status=status.HTTP_401_UNAUTHORIZED)
+                else:
+                    return Response({
+                        "status": "fail",
+                        'code': 401,
+                        "data": {'message': 'Email or password is incorrect!'}
+                    }, status=status.HTTP_401_UNAUTHORIZED)
         else:
             return Response({
                 "status": "fail",
@@ -297,6 +301,7 @@ class AuthView(APIView):
 
 class LogoutView(APIView):
     serializer_class = None
+
     def post(self, request):
         response = Response()
         response.delete_cookie('Token')

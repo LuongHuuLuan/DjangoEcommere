@@ -35,3 +35,11 @@ class ProductResponseSerializer(serializers.Serializer):
     status = serializers.CharField(max_length=255)
     code = serializers.IntegerField()
     data = ProductSerializer(many=True)
+class ProductRequestSerializer(serializers.Serializer):
+    name = serializers.CharField(max_length=255)
+    introduce = serializers.CharField()
+    price = serializers.IntegerField(default=0)
+    quantity = serializers.IntegerField(default=0)
+    create_at = serializers.DateTimeField()
+    image = serializers.ImageField()
+    video = serializers.FileField()

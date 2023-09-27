@@ -13,11 +13,17 @@
 * **CRUD Functionality:** Implement CRUD operations (Create, Read, Update, Delete) for managing a specific resource (e.g., products).
 * **Token-Based Authentication:** Understand and implement token-based authentication to secure the API.
 
+## Getting Started
+This project use the Python 3.11, the pip 23.2.1 package and add some configuration files to deploy the app.
+
 ## Install
 
-**Note:** Please ensure you have Python 3.11 installed on your computer before proceeding with these steps. If Python 3.11 is not installed, you can download it from the [Python official website.](https://www.python.org/downloads/release/python-3110/)
+**Note:** Please ensure you have Python 3.11 and pip 23.2.1 installed on your computer before proceeding with these steps. If Python or pip is not installed, you can download it here:
 
+* [python 3.11](https://www.python.org/downloads/release/python-3110/)
+* [pip 23.2.1](https://pip.pypa.io/en/stable/installation/)
 
+## **Steps**
 1. Download the Source Code from GitHub:
 ```sh
 git clone https://github.com/LuongHuuLuan/DjangoEcommere.git
@@ -51,7 +57,19 @@ Next, we need to install the necessary libraries. The required packages are list
 ```sh
 pip install -r requirements.txt
 ```
+5. Config .env
 
+create .env file in the root folder add some line in this
+
+```sh
+DEBUG=True
+SECRET_KEY=your secret key
+ALLOWED_HOSTS=*
+SQLITE_URL=sqlite:///db.sqlite3
+#if use mysql
+#DATABASE_URL=mysql://username:@host:port/database_name
+```
+the secret can created in [here](https://codinggear.blog/django-generate-secret-key/)
 ## Usage
 
 Use the python manage.py runserver command to start the Django development 
